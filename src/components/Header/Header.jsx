@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 
 import { Container, Row, Col } from "reactstrap";
 import { Link, NavLink } from "react-router-dom";
 import "../../styles/header.css";
+import { IndexContent } from "../ContextApi/ContextApi";
 
 const navLinks = [
   {
@@ -15,23 +16,49 @@ const navLinks = [
   },
   {
     path: "/cars",
-    display: "Cars",
+    display: "Buy a Car",
+  },
+  {
+    path: "/contact",
+    display: "Contact",
+  },
+  {
+    path: "/sellMyCar",
+    display: "Sell my Car",
   },
 
   // {
   //   path: "/blogs",
   //   display: "Blog",
   // },
-  {
-    path: "/contact",
-    display: "Contact",
-  },
+  
 ];
 
 const Header = () => {
+  const {localStorageValue,setLocalStorageValue}=useContext(IndexContent);
   const menuRef = useRef(null);
 
   const toggleMenu = () => menuRef.current.classList.toggle("menu__active");
+
+  useEffect(()=>{
+    if(localStorage.getItem("token")){
+      setLocalStorageValue("token")
+      // alert(`Welcome to Carbage ${localStorage.getItem("username")}`)
+    }
+  },[localStorageValue]);
+
+
+  function clearSetValue() {
+   setLocalStorageValue("")
+  }
+
+
+  function clearLocalStorageValue() {
+    window.location.reload();
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    
+  }
 
   return (
     <header className="header">
@@ -50,13 +77,15 @@ const Header = () => {
 
             <Col lg="6" md="6" sm="6">
               <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
-                <Link to="Login" className=" d-flex align-items-center gap-1">
+                {!localStorageValue?<Link to="Login" className=" d-flex align-items-center gap-1">
                   <i class="ri-login-circle-line"></i> Login
-                </Link>
+                </Link>:<Link to="/"  className=" d-flex align-items-center gap-1 cursor-pointer" onClick={()=>{clearSetValue(); clearLocalStorageValue();}}>
+                  <i class="ri-login-circle-line"></i> Logout
+                </Link>}
 
-                {/* <Link to="#" className=" d-flex align-items-center gap-1">
+                {!localStorageValue && <Link to="signUp" className=" d-flex align-items-center gap-1">
                   <i class="ri-user-line"></i> Register
-                </Link> */}
+                </Link>}
               </div>
             </Col>
           </Row>

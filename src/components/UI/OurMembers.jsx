@@ -24,7 +24,7 @@ const OUR__MEMBERS = [
     instUrl: "#",
     twitUrl: "#",
     linkedinUrl: "#",
-    imgUrl: ava02,
+    imgUrl: ava01,
   },
 
   {
